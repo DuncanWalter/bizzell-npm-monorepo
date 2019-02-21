@@ -43,7 +43,7 @@ function ButtonDemo() {
   )
 }
 
-/* Replaced ButtonDemo to test that the state store works */
+/* test that redux counter works */
 function counterDemo() {
   return (
     <div>
@@ -66,7 +66,7 @@ const layoutRoot: LayoutRoot = {
     props: {},
   },
   customComponents: {
-    buttonDemo: counterDemo,
+    buttonDemo: ButtonDemo,
   },
 }
 

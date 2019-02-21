@@ -4,11 +4,14 @@ import { createStore } from 'redux'
 import { reducer } from './reducers'
 
 export interface AppState {
+  // placeholder
   count: number
+  isEditing: boolean
 }
 
 const initialState: AppState = {
   count: 0,
+  isEditing: true,
 }
 
 export const store = createStore(reducer, initialState)
