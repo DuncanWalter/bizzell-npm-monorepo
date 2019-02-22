@@ -1,43 +1,62 @@
-#!/usr/bin/env node
-const args = require('yargs')
-  .option('build', {
-    default: false,
-    describe: 'Compile a production build. Emits static assets.',
-  })
-  .option('dev', {
-    default: false,
-    describe:
-      'Run a project dev server on localhost:3000. Good for developing new components.',
-  })
-  .option('edit', {
-    default: false,
-    describe:
-      'Run a dev server with a persistance server for changes to html content within editor components.',
-  }).argv
+/*
+ **  Command Line Tool: Using Yargs
+ **  ------------------------------
+ **  This file is used to take user input in
+ **  editing, building, or developing a project.
+ **
+ */
 
-const { copySync } = require('fs-extra')
-const { join } = require('path')
-const webpack = require('webpack')
-const Server = require('webpack-dev-server')
-const fs = require('fs')
+//Gets the arguments and checks to see which one to use
+const argv = require('yargs')
+  .usage('Usage: $0 option message \n e.g $0 -s message')
 
-// const args = process.argv.slice(2)
+  //Edit the project
+  .alias('e', 'edit')
+  .nargs('e', 0)
+  .describe('e', 'Edit the project')
 
-const mode =
-  ['edit', 'build', 'dev']
-    .filter(mode => args[mode])
-    .find((val, _, { length }) => {
-      if (length > 1) {
-        throw new Error(
-          'create-bizzell-app can only be used in one mode at a time',
-        )
-        return false
-      } else {
-        return true
-      }
-    }) || 'create'
+  //Build the project
+  .alias('b', 'build')
+  .nargs('b', 0)
+  .describe('b', 'Build the project')
 
-const path = args._[0] || './'
+  //Develop the project
+  .alias('d', 'dev')
+  .nargs('d', 0)
+  .describe('d', 'Develop the project')
+
+  //Path chosen
+  .alias('p', 'path')
+  .nargs('p', 1)
+  .describe('p', 'Path for the project')
+
+  //If need help, use this
+  .help('h')
+  .alias('h', 'help')
+  .epilog('Copyright Abdul 2017').argv
+
+//Variables to send
+mode = ''
+path = ''
+
+//Check which one is selected.
+if (argv.e != null) {
+  mode = 'edit'
+} else if (argv.b != null) {
+  mode = 'build'
+} else if (argv.d != null) {
+  mode = 'develop'
+}
+
+//If the path is not specified, then it will be set the the folders root folder
+if (argv.p == null) {
+  path = '.'
+} else {
+  path = argv.p
+}
+
+//Just print to see that it tested correctly.
+//Pass both mode and path
 
 switch (mode) {
   case 'create': {
