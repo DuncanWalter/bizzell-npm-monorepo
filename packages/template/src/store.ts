@@ -4,7 +4,6 @@ import { createStore } from 'redux'
 import { reducer } from './reducers'
 
 export interface AppState {
-  // placeholder
   count: number
   isEditing: boolean
 }
