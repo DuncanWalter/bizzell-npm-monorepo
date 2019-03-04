@@ -9,8 +9,15 @@ const { root } = styles
 
 function App() {
   return (
-    <div className={joinNames(root, justifyCenter, alignCenter)}>
-      <div style={{ padding: '24px 12px 24px', backgroundColor: '#ffffff' }}>
+    <div className={joinNames(root, justifyCenter)}>
+      <div
+        style={{
+          padding: '24px 12px 24px',
+          backgroundColor: '#ffffff',
+          minWidth: '700px',
+          minHeight: '500px',
+        }}
+      >
         <AppRouter />
       </div>
     </div>
