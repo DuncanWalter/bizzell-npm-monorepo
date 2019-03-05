@@ -1,23 +1,25 @@
 import React from 'react'
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Card } from '@bizzell/tempest'
+import { CardContent } from '@bizzell/tempest/src/Card'
 
 export class Navigation extends Component {
   render() {
     return (
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>
+      <Card>
+        <CardContent>
+          <Link to="/">
+            <Button text="Home" />
+          </Link>
+          <Link to="/dashboard">
+            <Button text="Dashboard" />
+          </Link>
+          <Link to="/about">
+            <Button text="About" />
+          </Link>
+        </CardContent>
+      </Card>
     )
   }
 }
