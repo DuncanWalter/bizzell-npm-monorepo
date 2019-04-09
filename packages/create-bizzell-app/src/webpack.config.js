@@ -5,9 +5,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const AnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const CopyPlugin = require('copy-webpack-plugin')
 
 function clean(...entries) {
   return entries.filter(entry => !!entry && entry !== true)
+}
+
+module.exports = {
+  plugins: [
+    new CopyPlugin([
+      // { from: 'source', to: 'dest' },
+      // { from: 'other', to: 'public' },
+    ]),
+  ],
 }
 
 module.exports = function createConfig(production, target) {
@@ -26,7 +36,6 @@ module.exports = function createConfig(production, target) {
       path: outPath,
       filename: 'bundle.js',
       chunkFilename: '[id].chunk.js',
-      publicPath: '/',
     },
     target: 'web',
     resolve: {
@@ -51,8 +60,8 @@ module.exports = function createConfig(production, target) {
                   }),
                 ),
                 plugins: clean(
-                  require('@babel/plugin-syntax-dynamic-import'),
-                  require('@babel/plugin-syntax-class-properties'),
+                  require.resolve('@babel/plugin-syntax-dynamic-import'),
+                  require.resolve('@babel/plugin-syntax-class-properties'),
                 ),
               },
             },
@@ -120,6 +129,7 @@ module.exports = function createConfig(production, target) {
         $: 'jquery',
         jQuery: 'jquery',
       }),
+      new CopyPlugin([{ from: '../static', to: 'build' }]),
     ),
     devServer: {
       contentBase: sourcePath,

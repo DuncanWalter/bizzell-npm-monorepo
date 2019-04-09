@@ -15,7 +15,7 @@ const argv = require('yargs')
   .describe('e', 'Edit the projects editor panel content')
 
   //Build the project
-  .alias('buid', 'b')
+  .alias('build', 'b')
   .nargs('b', 0)
   .describe('b', 'Build project static assets in production mode')
 
@@ -69,20 +69,20 @@ switch (mode) {
     // use the webpack config on edit mode
     new Server(webpack(require('./webpack.config')(false, path, true)), {
       hot: true,
-      // progress: true,
-      // color: true,
       open: true,
     }).listen(3000, console.error)
+
     break
   }
   case 'dev': {
     // use the webpack config on dev mode
     new Server(webpack(require('./webpack.config')(false, path, false)), {
       hot: true,
-      // progress: true,
-      // color: true,
       open: true,
     }).listen(3000, console.error)
+
+    require('./editor-server').startServer(3001, path)
+
     break
   }
   case 'build': {

@@ -1,23 +1,20 @@
 import React, { Fragment } from 'react'
-import { AppRouter } from './AppRouter'
-import {
-  joinNames,
-  justifyCenter,
-  Button,
-  justifyEnd,
-  Text,
-} from '@bizzell/tempest'
-import { AppState } from './configureStore'
+import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 
+import { joinNames, justifyCenter, Button, justifyEnd } from '@bizzell/tempest'
+
+import { AppRouter } from './AppRouter'
 import styles from './index.css'
-import { Dispatch } from 'redux'
-import { toggleEditing } from './actions'
+import { toggleEditing, resolveEdits, EditorState } from './store/editor'
 import appStyles from './App.css'
+import { AppState } from './store'
 const { root } = styles
 const { ulStyle, liStyle } = appStyles
 
-interface AppProps extends AppState {
+interface AppProps {
+  isEditing: boolean
+  currentEdits: { [id: string]: string }
   dispatch: Dispatch
 }
 
@@ -25,6 +22,23 @@ class App extends React.Component<AppProps> {
   handleToggleEditing() {
     const { dispatch } = this.props
     dispatch(toggleEditing())
+  }
+
+  handleSave() {
+    const { currentEdits, dispatch } = this.props
+    Promise.all(
+      Object.keys(currentEdits).map(id => {
+        fetch(
+          new Request(`http://localhost:3001/edit/${id}`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'text/json',
+            },
+            body: `{"content":"${currentEdits[id]}"}`,
+          }),
+        )
+      }),
+    ).then(() => dispatch(resolveEdits()))
   }
 
   renderEditingToolbar() {
@@ -35,21 +49,26 @@ class App extends React.Component<AppProps> {
         <nav>
           <ul className={joinNames(ulStyle, justifyEnd)}>
             <li className={liStyle}>
-              {' '}
               <Button
                 primary
                 disabled={!isEditing}
                 text="Display"
                 onClick={() => this.handleToggleEditing()}
-              />{' '}
+              />
             </li>
             <li className={liStyle}>
-              {' '}
               <Button
                 primary
                 disabled={isEditing}
                 text="Edit"
                 onClick={() => this.handleToggleEditing()}
+              />
+            </li>
+            <li className={liStyle}>
+              <Button
+                primary
+                text="Save Changes"
+                onClick={() => this.handleSave()}
               />
             </li>
           </ul>
@@ -80,8 +99,8 @@ class App extends React.Component<AppProps> {
   }
 }
 
-function mapStateToProps(state: AppState) {
-  return { ...state }
+function mapStateToProps(state: AppState): EditorState {
+  return { ...state.editor }
 }
 
 const AppContainer = connect(
