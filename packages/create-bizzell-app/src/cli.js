@@ -6,12 +6,36 @@
 **  This file is used to take user input in 
 **  editing, building, or developing a project.
 **
+**
+**  How to use:
+**  -------------------------------
+**  1) Open file location you want to make the project
+**  2) USE: create-bizzell-app --create // This will create the app
+**  3) USE: create-bizzell-app --edit //This will edit the app
+**  4) USE: create-bizzell-app --build //This will build the app
+**  5) USE: create-bizzell-app --dev //This will develop the app
+**  6) USE: create-bizzell-app --build  --path [file location] //This will build the app and make a location 
+**  Note: If you do not specify path, it will use its current directory location
+**
+**
 */
 
+//Import these files for creating the project
+const { copySync } = require('fs-extra')
+const { join } = require('path')
+const webpack = require('webpack')
+const Server = require('webpack-dev-server')
+const fs = require('fs')
 
 //Gets the arguments and checks to see which one to use
 const argv = require('yargs')
     .usage('Usage: $0 option message \n e.g $0 -s message')
+
+
+    //Create the project
+    .alias('c', 'create')
+    .nargs('c', 0)
+    .describe('c', 'Create the project')
 
     //Edit the project
     .alias('e', 'edit')
@@ -40,13 +64,16 @@ const argv = require('yargs')
     .argv
 
 
-
 //Variables to send
 mode = '';
 path = '';
 
 //Check which one is selected. 
-if(argv.e != null)
+if(argv.c != null)
+{
+    mode = 'create';
+}
+else if(argv.e != null)
 {
     mode = 'edit';
 }
@@ -56,7 +83,7 @@ else if(argv.b != null)
 }
 else if(argv.d != null)
 {
-    mode = 'develop';
+    mode = 'dev';
 }
 
 //If the path is not specified, then it will be set the the folders root folder
@@ -71,6 +98,8 @@ if(argv.p == null)
 
 //Just print to see that it tested correctly.
 //Pass both mode and path
+//console.log(mode);
+//console.log(path);
 
 
 
