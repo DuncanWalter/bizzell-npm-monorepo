@@ -33,6 +33,15 @@ const path =
     )
   })()
 
+
+
+
+
+
+//Insert the code here...
+
+
+
 switch (mode) {
   case 'create': {
     // copy the template to the path
