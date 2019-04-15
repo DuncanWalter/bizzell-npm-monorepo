@@ -2,7 +2,7 @@
  **  Command Line Tool: Using Yargs
  **  ------------------------------
  **  This file is used to take user input in
- **  editing, building, or developing a project.
+ **  creating, editing, building, or developing a project.
  **
  */
 
