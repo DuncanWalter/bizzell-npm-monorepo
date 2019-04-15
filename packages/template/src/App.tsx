@@ -1,0 +1,92 @@
+import React, { Fragment } from 'react'
+import { AppRouter } from './AppRouter'
+import {
+  joinNames,
+  justifyCenter,
+  Button,
+  justifyEnd,
+  Text,
+} from '@bizzell/tempest'
+import { AppState } from './configureStore'
+import { connect } from 'react-redux'
+
+import styles from './index.css'
+import { Dispatch } from 'redux'
+import { toggleEditing } from './actions'
+import appStyles from './App.css'
+const { root } = styles
+const { ulStyle, liStyle } = appStyles
+
+interface AppProps extends AppState {
+  dispatch: Dispatch
+}
+
+class App extends React.Component<AppProps> {
+  handleToggleEditing() {
+    const { dispatch } = this.props
+    dispatch(toggleEditing())
+  }
+
+  renderEditingToolbar() {
+    const { isEditing } = this.props
+
+    return (
+      <div>
+        <nav>
+          <ul className={joinNames(ulStyle, justifyEnd)}>
+            <li className={liStyle}>
+              {' '}
+              <Button
+                primary
+                disabled={!isEditing}
+                text="Display"
+                onClick={() => this.handleToggleEditing()}
+              />{' '}
+            </li>
+            <li className={liStyle}>
+              {' '}
+              <Button
+                primary
+                disabled={isEditing}
+                text="Edit"
+                onClick={() => this.handleToggleEditing()}
+              />
+            </li>
+          </ul>
+        </nav>
+      </div>
+    )
+  }
+
+  render() {
+    const toolbar = this.renderEditingToolbar()
+
+    return (
+      <Fragment>
+        {toolbar}
+        <div className={joinNames(root, justifyCenter)}>
+          <div
+            style={{
+              padding: '24px 0 0',
+              minWidth: '700px',
+              minHeight: '500px',
+            }}
+          >
+            <AppRouter />
+          </div>
+        </div>
+      </Fragment>
+    )
+  }
+}
+
+function mapStateToProps(state: AppState) {
+  return { ...state }
+}
+
+const AppContainer = connect(
+  mapStateToProps,
+  dispatch => ({ dispatch }),
+)(App)
+
+export { AppContainer as App }

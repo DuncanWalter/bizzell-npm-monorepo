@@ -1,9 +1,15 @@
-#!/usr/bin/env node
+/*
+ **  Command Line Tool: Using Yargs
+ **  ------------------------------
+ **  This file is used to take user input in
+ **  editing, building, or developing a project.
+ **
+ */
 
 /*
 **  Command Line Tool: Using Yargs
 **  ------------------------------
-**  This file is used to take user input in 
+**  This file is used to take user input in
 **  editing, building, or developing a project.
 **
 **
@@ -14,7 +20,7 @@
 **  3) USE: create-bizzell-app --edit //This will edit the app
 **  4) USE: create-bizzell-app --build //This will build the app
 **  5) USE: create-bizzell-app --dev //This will develop the app
-**  6) USE: create-bizzell-app --build  --path [file location] //This will build the app and make a location 
+**  6) USE: create-bizzell-app --build  --path [file location] //This will build the app and make a location
 **  Note: If you do not specify path, it will use its current directory location
 **
 **
@@ -41,7 +47,7 @@ const argv = require('yargs')
     .alias('e', 'edit')
     .nargs('e', 0)
     .describe('e', 'Edit the project')
-    
+
     //Build the project
     .alias('b', 'build')
     .nargs('b', 0)
@@ -68,7 +74,7 @@ const argv = require('yargs')
 mode = '';
 path = '';
 
-//Check which one is selected. 
+//Check which one is selected.
 if(argv.c != null)
 {
     mode = 'create';
@@ -106,7 +112,7 @@ if(argv.p == null)
 switch (mode) {
   case 'create': {
     // copy the template to the path
-    copySync(join(__dirname, './template'), path)
+    copySync(join(__dirname, '../template'), path)
     break
   }
   case 'edit': {
