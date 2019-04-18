@@ -1,30 +1,4 @@
-/*
- **  Command Line Tool: Using Yargs
- **  ------------------------------
- **  This file is used to take user input in
- **  creating, editing, building, or developing a project.
- **
- */
-
-/*
-**  Command Line Tool: Using Yargs
-**  ------------------------------
-**  This file is used to take user input in
-**  editing, building, or developing a project.
-**
-**
-**  How to use:
-**  -------------------------------
-**  1) Open file location you want to make the project
-**  2) USE: create-bizzell-app --create // This will create the app
-**  3) USE: create-bizzell-app --edit //This will edit the app
-**  4) USE: create-bizzell-app --build //This will build the app
-**  5) USE: create-bizzell-app --dev //This will develop the app
-**  6) USE: create-bizzell-app --build  --path [file location] //This will build the app and make a location
-**  Note: If you do not specify path, it will use its current directory location
-**
-**
-*/
+#!/usr/bin/env node
 
 //Import these files for creating the project
 const { copySync } = require('fs-extra')
@@ -35,79 +9,55 @@ const fs = require('fs')
 
 //Gets the arguments and checks to see which one to use
 const argv = require('yargs')
-    .usage('Usage: $0 option message \n e.g $0 -s message')
+  //Edit the project
+  .alias('edit', 'e')
+  .nargs('e', 0)
+  .describe('e', 'Edit the projects editor panel content')
 
+  //Build the project
+  .alias('buid', 'b')
+  .nargs('b', 0)
+  .describe('b', 'Build project static assets in production mode')
 
-    //Create the project
-    .alias('c', 'create')
-    .nargs('c', 0)
-    .describe('c', 'Create the project')
+  //Develop the project
+  .alias('dev', 'd')
+  .nargs('d', 0)
+  .describe('d', 'Run a development server in dev mode')
 
-    //Edit the project
-    .alias('e', 'edit')
-    .nargs('e', 0)
-    .describe('e', 'Edit the project')
-
-    //Build the project
-    .alias('b', 'build')
-    .nargs('b', 0)
-    .describe('b', 'Build the project')
-
-    //Develop the project
-    .alias('d', 'dev')
-    .nargs('d', 0)
-    .describe('d', 'Develop the project')
-
-    //Path chosen
-    .alias('p', 'path')
-    .nargs('p', 1)
-    .describe('p', 'Path for the project')
-
-    //If need help, use this
-    .help('h')
-    .alias('h', 'help')
-    .epilog('Copyright Abdul 2017')
-    .argv
-
+  //Path chosen
+  .alias('path', 'p')
+  .nargs('p', 1)
+  .describe('p', 'Path to run create-bizzell-app from').argv
 
 //Variables to send
-mode = '';
-path = '';
+let mode = ''
+let path = ''
 
 //Check which one is selected.
-if(argv.c != null)
-{
-    mode = 'create';
-}
-else if(argv.e != null)
-{
-    mode = 'edit';
-}
-else if(argv.b != null)
-{
-    mode = 'build';
-}
-else if(argv.d != null)
-{
-    mode = 'dev';
+switch (true) {
+  case argv.e: {
+    mode = 'edit'
+    break
+  }
+  case argv.b: {
+    mode = 'build'
+    break
+  }
+  case argv.d: {
+    mode = 'dev'
+    break
+  }
+  default: {
+    mode = 'create'
+  }
 }
 
 //If the path is not specified, then it will be set the the folders root folder
-if(argv.p == null)
-{
-    path = '.'
-}else{
-    path = argv.p;
+if (argv.p == null) {
+  path = '.'
+} else {
+  path = argv.p
 }
-
-
-
-//Just print to see that it tested correctly.
-//Pass both mode and path
-//console.log(mode);
-//console.log(path);
-
-
 
 switch (mode) {
   case 'create': {
