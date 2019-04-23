@@ -47,26 +47,23 @@ module.exports = function createConfig(production, target) {
       rules: [
         {
           test: /\.tsx?$/,
-          use: clean(
-            {
-              loader: require.resolve('babel-loader'),
-              options: {
-                presets: clean(
-                  /*production ||*/ require('@babel/preset-react'),
-                  /*production ||*/ require('@babel/preset-typescript'),
-                  clean(require('@babel/preset-env'), {
-                    modules: false,
-                    targets: 'last 1 version, not dead, > 1% in US',
-                  }),
-                ),
-                plugins: clean(
-                  require.resolve('@babel/plugin-syntax-dynamic-import'),
-                  require.resolve('@babel/plugin-syntax-class-properties'),
-                ),
-              },
+          use: clean({
+            loader: require.resolve('babel-loader'),
+            options: {
+              presets: clean(
+                require('@babel/preset-react'),
+                require('@babel/preset-typescript'),
+                clean(require('@babel/preset-env'), {
+                  modules: false,
+                  targets: 'last 1 version, not dead, > 1% in US',
+                }),
+              ),
+              plugins: clean(
+                require.resolve('@babel/plugin-syntax-dynamic-import'),
+                require.resolve('@babel/plugin-syntax-class-properties'),
+              ),
             },
-            // production && require.resolve('ts-loader'),
-          ),
+          }),
         },
         {
           test: /\.css$/,
@@ -125,10 +122,11 @@ module.exports = function createConfig(production, target) {
       new HtmlWebpackPlugin({
         template: join(sourcePath, 'index.html'),
       }),
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-      }),
+      !production &&
+        new webpack.ProvidePlugin({
+          $: 'jquery',
+          jQuery: 'jquery',
+        }),
       new CopyPlugin([{ from: '../static', to: 'build' }]),
     ),
     devServer: {

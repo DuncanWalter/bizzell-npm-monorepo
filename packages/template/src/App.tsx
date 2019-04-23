@@ -1,14 +1,15 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, ReactNode } from 'react'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 
 import { joinNames, justifyCenter, Button, justifyEnd } from '@bizzell/tempest'
 
 import { AppRouter } from './AppRouter'
-import styles from './index.css'
-import { toggleEditing, resolveEdits, EditorState } from './store/editor'
-import appStyles from './App.css'
 import { AppState } from './store'
+import { toggleEditing, resolveEdits, EditorState } from './store/editor'
+
+import styles from './index.css'
+import appStyles from './App.css'
 const { root } = styles
 const { ulStyle, liStyle } = appStyles
 
@@ -78,7 +79,11 @@ class App extends React.Component<AppProps> {
   }
 
   render() {
-    const toolbar = this.renderEditingToolbar()
+    let toolbar: null | ReactNode = null
+
+    if (process.env.NODE_ENV === 'development') {
+      toolbar = this.renderEditingToolbar()
+    }
 
     return (
       <Fragment>

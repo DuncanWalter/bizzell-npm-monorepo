@@ -5,15 +5,9 @@ const { copySync } = require('fs-extra')
 const { join } = require('path')
 const webpack = require('webpack')
 const Server = require('webpack-dev-server')
-const fs = require('fs')
 
 //Gets the arguments and checks to see which one to use
 const argv = require('yargs')
-  //Edit the project
-  .alias('edit', 'e')
-  .nargs('e', 0)
-  .describe('e', 'Edit the projects editor panel content')
-
   //Build the project
   .alias('build', 'b')
   .nargs('b', 0)
@@ -35,10 +29,6 @@ let path = ''
 
 //Check which one is selected.
 switch (true) {
-  case argv.e: {
-    mode = 'edit'
-    break
-  }
   case argv.b: {
     mode = 'build'
     break
@@ -63,15 +53,6 @@ switch (mode) {
   case 'create': {
     // copy the template to the path
     copySync(join(__dirname, '../template'), path)
-    break
-  }
-  case 'edit': {
-    // use the webpack config on edit mode
-    new Server(webpack(require('./webpack.config')(false, path, true)), {
-      hot: true,
-      open: true,
-    }).listen(3000, console.error)
-
     break
   }
   case 'dev': {
